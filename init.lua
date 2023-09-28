@@ -1,2 +1,4 @@
-print("hello from init.lua")
+require("keymap")
+require("plugins")
+require("telescope")
 
