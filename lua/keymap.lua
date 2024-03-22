@@ -35,6 +35,8 @@ vim.keymap.set("x", "<leader>p", "\"_dP")
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
 
+-- escape from terminal mode
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]])
 -- buffers
 vim.api.nvim_set_keymap("n", "tk", ":blast<enter>", {noremap=false})
 vim.api.nvim_set_keymap("n", "tj", ":bfirst<enter>", {noremap=false})

@@ -29,6 +29,18 @@ lsp.on_attach(function(_, bufnr)
     vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename , opts)
 end)
 
+lsp.format_on_save({
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
+  servers = {
+    ['tsserver'] = {'javascript', 'typescript'},
+    ['rust_analyzer'] = {'rust'},
+    ['gopls'] = {'go'},
+  }
+})
+
 lsp.setup()
 
 --- Language server configurations
@@ -41,7 +53,9 @@ require("mason-lspconfig").setup({
         "rust_analyzer",
         "lua_ls",
         "gopls",
-        "bufls"
+        "bufls",
+        "html",
+        "typos_lsp",
         -- "sumneko_lua",
     },
     handlers = {
@@ -51,13 +65,6 @@ require("mason-lspconfig").setup({
 
 -- Completion setup
 local cmp = require("cmp")
--- local cmp_select = { behavior = cmp.SelectBehavior.Seelect }
--- local cmp_mappings = lsp.defaults.cmp_mappings({
---     ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
---     ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
---     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
---     ["<C-Space>"] = cmp.mapping.complete(),
--- })
 
 vim.opt.completeopt = {"menu", "menuone", "noselect"}
 
@@ -83,7 +90,6 @@ cmp.setup({
     {
         { name = "nvim_lsp" },
         { name = "luasnip" }, -- For luasnip users.
-
     },
     {
         { name = "buffer" }
@@ -105,17 +111,15 @@ cmp.setup.filetype("gitcommit", {
 -- Set lspconfig
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 local lspconfig = require("lspconfig")
+local servers = {"gopls", "rust_analyzer", "tsserver", "typos_lsp"}
 
-lspconfig["gopls"].setup {
-    capabilities = capabilities
-}
-
-lspconfig["rust_analyzer"].setup {
-    capabilities = capabilities
-    -- capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-}
+-- default setup
+for _, server in ipairs(servers) do
+    lspconfig[server].setup {
+        capabilities = capabilities
+    }
+end
 
 lspconfig["lua_ls"].setup {
     settings = {
@@ -128,48 +132,3 @@ lspconfig["lua_ls"].setup {
     },
 }
 
--- local sumneko_root = vim.fn.stdpath('cache') .. '/lspconfig/sumneko_lua/lua-language-server'
--- 
--- lspconfig["sumneko_lua"].setup {
---   cmd = {
---     sumneko_root .. '/bin/macOS/lua-language-server',
---     '-E',
---     sumneko_root .. '/main.lua',
---   },
---   capabilities = capabilities,
---   settings = {
---     Lua = {
---       runtime = { version = 'LuaJIT', path = vim.split(package.path, ';') },
---       diagnostics = {
---         enable = true,
---         globals = {'vim'},
---       },
---     }
---   },
--- }
-
--- lspconfig.rust_analyzer.setup({
---    settings = {
---      ['rust-analyzer'] = {
---        diagnostics = {
---          -- enable = false;
---          enable = true;
---        },
---        inlayHints = {
---            bindingModeHints = {
---                enable = true;
---            },
---            chainingHints = {
---                enable = true;
---            },
---            parameterHints = {
---                enable = true;
---            },
---            typeHints = {
---                enable = true;
---            }
---        }
---      }
---    }
---  })
--- 
