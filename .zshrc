@@ -187,7 +187,7 @@ if [ -f "$HOME/.google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.google-cl
 eval "$(starship init zsh)"
 alias l="ls -al"
 # zsh autosuggestions
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 alias gs="git status"
 
@@ -287,3 +287,6 @@ bindkey -M viins '^P' up-history
 # 2024-11-23 Display fastfetch
 fastfetch
 
+
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"
